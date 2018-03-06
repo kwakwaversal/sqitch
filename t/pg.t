@@ -124,8 +124,7 @@ is $pg->uri->as_string, 'db:pg://localhost/try',
 is $pg->registry, 'meta', 'registry should be as configured';
 is_deeply [$pg->psql], [qw(
     /path/to/psql
-    --dbname   try
-    --host     localhost
+    postgresql://localhost/try
 ), @std_opts], 'psql command should be configured from URI config';
 
 ##############################################################################
@@ -147,8 +146,7 @@ is $pg->registry_destination, $pg->destination,
 is $pg->registry, 'meta', 'registry should still be as configured';
 is_deeply [$pg->psql], [qw(
     /some/other/psql
-    --dbname   try
-    --host     localhost
+    postgresql://localhost/try
 ), @std_opts], 'psql command should be as optioned';
 
 ##############################################################################

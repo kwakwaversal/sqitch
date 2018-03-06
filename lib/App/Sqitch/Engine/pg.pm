@@ -45,14 +45,12 @@ has _psql => (
         my $self = shift;
         my $uri  = $self->uri;
         my @ret  = ( $self->client );
-        for my $spec (
-            [ username => $self->username ],
-            [ dbname   => $uri->dbname    ],
-            [ host     => $uri->host      ],
-            [ port     => $uri->_port     ],
-            )
-        {
-            push @ret, "--$spec->[0]" => $spec->[1] if $spec->[1];
+
+        # psql accepts connection info as a URI (requires postgresql scheme)
+        my $conninfo = $uri->canonical;
+        if ($conninfo && $conninfo ne 'pg:') {
+            $conninfo =~ s/^pg/postgresql/;
+            push @ret => $conninfo;
         }
 
         if (my %vars = $self->variables) {
